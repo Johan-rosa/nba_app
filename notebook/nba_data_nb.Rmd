@@ -1,0 +1,80 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Por la NBA han pasado muchos jugadores
+
+```{r}
+player_full %>%
+  count(year_start) %>%
+  ggplot(aes(x = year_start, y = n)) +
+  geom_col(fill = "midnightblue", alpha= 0.6) +
+  theme_roboto() +
+  scale_x_continuous(breaks = seq(1950, 2020, by = 10)) +
+  labs(
+    x = "",
+    y = "Número de jugadores",
+    title = "Jugadores que ingresaron a la NBA",
+    subtitle = "Incluye solo a jugadores que jugaron al menos un segundo"
+  )
+
+```
+
+
+```{r message=FALSE, warning=FALSE}
+player_full %>%
+  filter(!is.na(position)) %>%
+  mutate(
+    decade = str_replace(as.character(year_start), ".$", "0"),
+    decade = as.numeric(decade)
+  ) %>%
+  ggplot(aes(y = height, x = decade, group = decade)) +
+  #scale_x_discrete(breaks = c("1950", "1970", "1990", "2010")) +
+  facet_wrap(~position, scales = "free") +
+  geom_boxplot() +
+  theme_plex()
+```
+
+```{r}
+player_data %>%
+  group_by(year_start) %>%
+  summarise(height1 = mean(height1, na.rm = TRUE)) %>%
+  ggplot(aes(x = year_start, y = height1/100)) +
+  geom_line(color = "midnightblue") +
+  theme_plex() +
+  labs(
+    x = "",
+    y = "Player hwight",
+    title = "Players average height",
+    subtitle = "1950-2018"
+  )
+```
+
+
+
+```{r message=FALSE, warning=FALSE}
+player_full %>%
+  filter(!is.na(position)) %>%
+  ggplot(aes(x = year_start, y = height, color = position)) +
+  geom_jitter(alpha = 0.6) +
+  theme_roboto() +
+  facet_wrap(~position) +
+  theme(legend.position = "bottom") +
+  labs(color = "")
+```
+
+
+```{r}
+player_full %>%
+  mutate(
+    duration = year_end - year_start
+  ) %>%
+  filter(duration > 5) %>%
+  ggplot(aes(x = duration, y = height1)) +
+  geom_jitter()
+```
+
+
+
+

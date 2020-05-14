@@ -1,0 +1,60 @@
+---
+title: "Kobe %>% as.leyend('Forever')"
+output: html_notebook
+---
+
+```{r}
+# paquetes
+```
+
+
+```{r}
+library(tidyverse)
+#library(pachwork)
+theme_set(theme_plex())
+```
+
+
+```{r}
+seasons_stats %>%
+  filter(player == "Kobe Bryant") %>%
+  select(year, games, games_started) %>%
+  ggplot(
+    aes(x = year, y = games)
+  ) +
+  geom_col() +
+  scale_x_continuous(breaks = seq(1996, 2016, 4)) +
+  geom_text(aes(x = year, y = games, label = games), vjust = -0.5) +
+  theme(
+    axis.text.y = element_blank()
+  ) +
+  labs(
+    x = "Temporada",
+    y = "Juegos jugados"
+    )
+```
+Juegos en el quinteto inicial
+
+```{r}
+seasons_stats %>%
+  filter(player == "Kobe Bryant") %>%
+  select(year, games, games_started) %>%
+  # mutate(
+  #   games_not_starter = games - games_started
+  # ) %>% 
+  #select(-games) %>%
+  gather(starter, games, -year) %>%
+  ggplot(aes(x = year, y = games, fill = starter)) +
+  geom_col(position = "identity") +
+  theme(
+    legend.position = "bottom"
+  )
+```
+
+```{r}
+seasons_stats %>%
+  filter()
+  group_by(is.kobe = player == "Kobe Bryant", year) %>%
+  summarise_if(is.numeric, ~mean(., na.rm = TRUE))
+```
+
